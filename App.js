@@ -5,6 +5,7 @@ import { Platform, StyleSheet, Text, View, Image } from "react-native";
 
 import RouteNav from "./app/route/RouteNav";
 import { createStackNavigator, createAppContainer } from "react-navigation";
+import OneSignal from 'react-native-onesignal'; 
 
 import Login from "./app/screens/Login/Login";
 import Register from "./app/screens/Register/Register";
@@ -82,15 +83,42 @@ const AppDrawerNavigator = createStackNavigator({
 
 const AppContainer = createAppContainer(AppDrawerNavigator);
 
-const instructions = Platform.select({
-  ios: "Press Cmd+R to reload,\n" + "Cmd+D or shake for dev menu",
-  android:
-    "Double tap R on your keyboard to reload,\n" +
-    "Shake or press menu button for dev menu"
-});
+
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  constructor(properties) {
+    super(properties);
+    OneSignal.init("11f42788-bda0-4f47-862c-f091a44ddd04");
+
+    OneSignal.addEventListener('received', this.onReceived);
+    OneSignal.addEventListener('opened', this.onOpened);
+    OneSignal.addEventListener('ids', this.onIds);
+  }
+
+  componentWillUnmount() {
+    OneSignal.removeEventListener('received', this.onReceived);
+    OneSignal.removeEventListener('opened', this.onOpened);
+    OneSignal.removeEventListener('ids', this.onIds);
+  }
+
+  onReceived(notification) {
+    console.log("Notification received: ", notification);
+  }
+
+  onOpened(openResult) {
+    console.log('Message: ', openResult.notification.payload.body);
+    console.log('Data: ', openResult.notification.payload.additionalData);
+    console.log('isActive: ', openResult.notification.isAppInFocus);
+    console.log('openResult: ', openResult);
+  }
+
+  onIds(device) {
+    console.log('Device info: ', device);
+  }
+
+
   render() {
     return <AppContainer />;
   }

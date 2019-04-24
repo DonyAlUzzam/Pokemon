@@ -5,29 +5,7 @@ import { Container, Content, Item, Input, Icon, Card, CardItem, Right, List } fr
 
 export default class HomeScreen extends Component {
 
-  componentWillMount() {
-    OneSignal.init("YOUR_ONESIGNAL_APPID");
-
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened);
-}
-
-componentWillUnmount() {
-    OneSignal.removeEventListener('received', this.onReceived);
-    OneSignal.removeEventListener('opened', this.onOpened);
-}
-
-onReceived(notification) {
-    console.log("Notification received: ", notification);
-}
-
-onOpened(openResult) {
-    console.log('Message: ', openResult.notification.payload.body);
-    console.log('Data: ', openResult.notification.payload.additionalData);
-    console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
-}
-
+ 
     renderSeparator = () => {
         return (
             <View style={{ height: 1, width: '100%', backgorundColor: '#000'}} />
