@@ -11,20 +11,51 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
-  Dimensions
+  Dimensions,
+  BackHandler
 } from "react-native";
 
-
-
-
-const onButtonPress = () => {
-this.props.navigation.navigate('ProfileScreen')
-};
+import {connect} from 'react-redux'
+import {registerUser} from '../../redux/actions'
 
 
 // create a component
 class Register extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      email: "",
+      password: "",
+      confirm_password:""
+    };
+  }
+
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+  }
+  handleBackPress = () => {
+    this.props.navigation.navigate("Home");
+    return true;
+  };
+
+  register(username, email, password, confirm_password){
+    if (confirm_password !== password){
+      alert("password not match");
+    } else {
+      this.props.registerUser(username, email, password, confirm_password)
+      this.props.navigation.navigate("Home");
+    }
+  
+  }
+
   render() {
+
     return (
         <ScrollView  style={styles.container}>
      
@@ -37,6 +68,8 @@ class Register extends Component {
           <TextInput
             style={styles.input}
             autoCapitalize="none"
+            value={this.state.username}
+            onChangeText={(text) => this.setState({ username: text })}
             ref={input => (this.username = input)}
             onSubmitEditing={() => this.email.focus()}
             autoCorrect={false}
@@ -48,6 +81,8 @@ class Register extends Component {
           <TextInput
             style={styles.input}
             autoCapitalize="none"
+            value={this.state.email}
+            onChangeText={(text) => this.setState({ email: text })}
             ref={input => (this.email = input)}
             onSubmitEditing={() => this.passwordInput.focus()}
             autoCorrect={false}
@@ -60,6 +95,8 @@ class Register extends Component {
           <TextInput
             style={styles.input}
             returnKeyType="next"
+            value={this.state.password}
+            onChangeText={(text) => this.setState({ password: text })}
             ref={input => (this.passwordInput = input)}
             placeholder="Password"
             placeholderTextColor="rgba(225,225,225,0.7)"
@@ -68,15 +105,16 @@ class Register extends Component {
           <TextInput
             style={styles.input}
             returnKeyType="go"
+            value={this.state.confirm_password}
+            onChangeText={(text) => this.setState({ confirm_password: text })}
             ref={input => (this.confirmPassword = input)}
             placeholder="Confirm Password"
             placeholderTextColor="rgba(225,225,225,0.7)"
             secureTextEntry
           />
-          {/*   <Button onPress={onButtonPress} title = 'Login' style={styles.loginButton} /> */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.props.navigation.navigate("Home")}
+            onPress={() => this.register(this.state.username, this.state.email, this.state.password, this.state.confirm_password)}
           >
             <Text style={styles.buttonText}>REGISTER</Text>
           </TouchableOpacity>
@@ -97,7 +135,17 @@ class Register extends Component {
   }
 }
 
-// define your styles
+const mapStateToProps = state => ({
+  isLoggedIn: state.account.isLoggedIn
+})
+
+const mapDispatchToProps = dispatch => ({
+  registerUser: (username, email, password, confirm_password) => dispatch(registerUser(username, email, password, confirm_password))
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Register)
+
 const styles = StyleSheet.create({
   container2: {
     padding: 20,
@@ -156,5 +204,4 @@ const styles = StyleSheet.create({
   }
 });
 
-//make this component available to the app
-export default Register;
+

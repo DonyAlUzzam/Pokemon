@@ -7,10 +7,13 @@ import RouteNav from "./app/route/RouteNav";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import OneSignal from 'react-native-onesignal'; 
 
+import { Provider } from "react-redux";
+import { store } from "./app/redux/store";
 import Login from "./app/screens/Login/Login";
 import Register from "./app/screens/Register/Register";
 import ProfileScreen from "./app/screens/Profile/ProfileScreen";
 import Detail from "./app/screens/Detail";
+import Questions from './app/screens/PostQuestions'
 
 const AppDrawerNavigator = createStackNavigator({
   HomeScreen: {
@@ -41,15 +44,34 @@ const AppDrawerNavigator = createStackNavigator({
       header: null
     }
   },
+
+  Questions: {
+    screen: Questions,
+    headerMode: "",
+    navigationOptions: {
+      headerTintColor: '#FFF',
+      // headerLeft: null,
+      // gesturesEnabled: false,
+      headerTitleStyle: {
+        marginLeft: 0,
+        color: "white"
+      },
+      title: "Post Your Questions",
+      headerStyle: {
+        backgroundColor: "#2c3e50"
+      }
+    }
+  },
+
   Detail: {
     screen: Detail,
-    headerMode: "none",
+    headerMode: "",
     navigationOptions: {
-      title: "Title",
-      headerLeft: null,
-      gesturesEnabled: false,
+     headerTintColor: '#FFF',
+      // headerLeft: null,
+      // gesturesEnabled: false,
       headerTitleStyle: {
-        marginLeft: 70,
+        marginLeft: 0,
         color: "white"
       },
       title: "Community Exchange",
@@ -60,11 +82,14 @@ const AppDrawerNavigator = createStackNavigator({
         <Image
           resizeMode="contain"
           style={{ width: 70, height: 35, top: 10, left: 0 }}
-          source={require("./app/assets/icon.png")}
+          // source={require("./app/assets/icon.png")}
         />
       )
     }
   },
+  
+
+
   ProfileScreen: {
     screen: ProfileScreen,
     headerMode: "none",
@@ -85,12 +110,11 @@ const AppContainer = createAppContainer(AppDrawerNavigator);
 
 
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
-  constructor(properties) {
-    super(properties);
-    OneSignal.init("11f42788-bda0-4f47-862c-f091a44ddd04");
+  constructor(props) {
+    super(props);
+    OneSignal.init("d7c17cab-2142-4f1f-921d-95d7a29295c3");
 
     OneSignal.addEventListener('received', this.onReceived);
     OneSignal.addEventListener('opened', this.onOpened);
@@ -120,7 +144,11 @@ export default class App extends Component<Props> {
 
 
   render() {
-    return <AppContainer />;
+    return (
+      <Provider store={store}>
+      <AppContainer />
+    </Provider>
+    );
   }
 }
 

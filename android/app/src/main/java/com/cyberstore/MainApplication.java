@@ -3,6 +3,7 @@ package com.cyberstore;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.geektime.rnonesignalandroid.ReactNativeOneSignalPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new ImagePickerPackage(),
             new ReactNativeOneSignalPackage(),
             new AsyncStoragePackage(),
             new ReactNativeConfigPackage(),

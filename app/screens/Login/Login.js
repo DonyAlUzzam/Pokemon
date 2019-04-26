@@ -11,33 +11,56 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
-  Dimensions
+  Dimensions,
+  BackHandler
 } from "react-native";
+import {connect} from 'react-redux'
+
+import {loginUser} from '../../redux/actions/'
 
 
-
-
-const onButtonPress = () => {
-this.props.navigation.navigate('ProfileScreen')
-};
-
-
-// create a component
 class Login extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: "d@gmail.com",
+      password: "12345"
+    };
+  }
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", this.handleBackPress);
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener("hardwareBackPress", this.handleBackPress);
+  }
+
+  handleBackPress = () => {
+    this.props.navigation.navigate("Home");
+    return true;
+  };
+
+  login(email, password) {
+    this.props.loginUser(email, password);
+    this.props.navigation.navigate("Home");
+  }
+
+
   render() {
+   
     return (
         <ScrollView  style={styles.container}>
      
-        {/* <View style={styles.loginContainer}> */}
           <Image style={styles.logo} source={require("../../assets/logo.png")} />
-        {/* </View> */}
         <View style={styles.container2}>
-          {/* <StatusBar barStyle="light-content" /> */}
           <KeyboardAvoidingView behavior="padding">
           <TextInput
             style={styles.input}
             autoCapitalize="none"
             ref={input => (this.email = input)}
+            onChangeText={(text) => this.setState({ email: text })}
+            value={this.state.email}
             onSubmitEditing={() => this.passwordInput.focus()}
             autoCorrect={false}
             keyboardType="email-address"
@@ -49,17 +72,18 @@ class Login extends Component {
           <TextInput
             style={styles.input}
             returnKeyType="next"
+            value={this.state.password}
+            onChangeText={(text) => this.setState({ password: text })}
             ref={input => (this.passwordInput = input)}
             placeholder="Password"
             placeholderTextColor="rgba(225,225,225,0.7)"
             secureTextEntry
           />
-          {/*   <Button onPress={onButtonPress} title = 'Login' style={styles.loginButton} /> */}
           <TouchableOpacity
             style={styles.buttonContainer}
-            onPress={() => this.props.navigation.navigate("Home")}
+            onPress={() => this.login(this.state.email, this.state.password)}
           >
-            <Text style={styles.buttonText}>REGISTER</Text>
+            <Text style={styles.buttonText}>LOGIN</Text>
           </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
@@ -78,7 +102,16 @@ class Login extends Component {
   }
 }
 
-// define your styles
+const mapStateToProps = state => ({
+  isLoggedIn: state.account.isLoggedIn
+})
+
+const mapDispatchToProps = dispatch => ({
+  loginUser: (email, password) => dispatch(loginUser(email, password))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
+
 const styles = StyleSheet.create({
   container2: {
     padding: 20,
@@ -137,5 +170,4 @@ const styles = StyleSheet.create({
   }
 });
 
-//make this component available to the app
-export default Login;
+

@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import { Text, View, FlatList, TouchableOpacity } from 'react-native'
 import { Container, Content, Item, Input, Icon, Card, CardItem, Right, List } from "native-base"
 
+import { requestCameraPermission } from '../components/Permission'
+import { getAll } from '../redux/actions';
+import { connect } from 'react-redux';
 
-export default class HomeScreen extends Component {
+ class HomeScreen extends Component {
 
  
     renderSeparator = () => {
@@ -12,111 +15,43 @@ export default class HomeScreen extends Component {
         );
     };
     
-    state = {
-        data: [
-          {
-            key: 'a',
-            itemTitle: 'Ilmu Pengetahuan Sosial',
-            itemName: "Salah satu contoh penggunaan alat tradisional ke alat modern dalam kehidupan sehari hari yaitu?",
-            itemCreator: "Fajri",
-          },
-          {
-            key: 'b',
-            itemTitle: 'Matematika',
-            itemName: "sebuah ruangan berbentuk persegi dengan panjang sisi 9 m kali 9 m tentukan keliling ruangan tersebut​?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'c',
-            itemTitle: 'Movie',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'd',
-            itemTitle: 'Cake',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'e',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'f',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'g',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'h',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'i',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'j',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'k',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          },
-          {
-            key: 'l',
-            itemTitle: 'cccccccc',
-            itemName: "Complete your shopping happiness?",
-            itemCreator: "Dony",
-          }
-        ]
-      }
-    
+      async componentDidMount() {
+
+        this.props.navigation.addListener('didFocus', ()=>{
+            this.props.getAll()
+        })
+        await requestCameraPermission()
+     }
 
   render() {
-    
+    // alert(JSON.stringify(this.props.questions))
     return (
      <Container style={{ marginBottom: 5 }}>
          {/* <Content> */}
          <Card style={{ marginLeft: 5, marginRight: 5 }}>
             <CardItem header style={{ borderBottomColor: '#dee0e2', borderBottomWidth: 1}}>
               <Text style={{ fontWeight: 'bold', paddingLeft: 25 }}> All Questions</Text>
-              <TouchableOpacity  onPress={() => this.props.navigation.navigate("Register")} >
+              <TouchableOpacity  onPress={() => this.props.navigation.navigate("Questions")} >
               <Text style={{ fontWeight: 'bold', paddingLeft: 25, marginLeft: 40 }}> Ask Questions</Text>
               </TouchableOpacity>
             </CardItem>
-            <List>
+          </Card>
+          <Content>
+            <View style={{marginBottom: 5}}>
             <FlatList
-              data={this.state.data}
+              data={this.props.questions}
               renderItem={({ item }) => (
-                <View>
+                <View >
                   <TouchableOpacity  onPress={() => this.props.navigation.navigate("Detail", {
-                   data:item
+                   id:item.id
                   })}
                   >
                   <Card >
-                    <CardItem>
-                      <Text>{item.itemTitle}</Text>
+                    <CardItem >
+                      <Text>{item.title}</Text>
                       </CardItem>
-                      <CardItem>
-                      <Text style={{ color: 'grey', fontSize: 11 }}>{item.itemCreator}</Text>
+                      <CardItem >
+                      <Text style={{ color: 'grey', fontSize: 11 }}>{item.user.username}</Text>
                       </CardItem>
                   </Card>
                   </TouchableOpacity>
@@ -124,10 +59,22 @@ export default class HomeScreen extends Component {
               )}
               ItemSeparatorComponent={this.renderSeparator}
             />
-          </List>
-          </Card>
-        {/* </Content> */}
+         
+         </View>
+        </Content>
      </Container>
     )
   }
 }
+
+
+const mapStateToProps = state => {
+   console.log('---->', state.questions)
+  return { questions: state.questions.questions }
+}
+
+const mapDispatchToProps = dispatch => ({
+  getAll: () => dispatch(getAll())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen)
