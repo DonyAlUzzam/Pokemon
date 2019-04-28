@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 
 import account from './AccountReducers'
-import questions from './QuestionReducers'
+import pokemons from './PokemonReducers'
 
-export default combineReducers({account, questions })
+export default combineReducers({account, pokemons })

@@ -1,224 +1,120 @@
-import React, { Component } from "react";
-import {
-  Container,
-  Content,
-  Card,
-  CardItem,
-  List,
-  Button
-} from "native-base";
+import React, { Component } from 'react';
+import { View, Image, Dimensions, StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 
-import { Text, TextInput, TouchableOpacity, Image, StyleSheet, FlatList, View} from "react-native";
-import { BASE_URL, PIC_URL } from "react-native-dotenv";
-import {getDetail, getUser, postAnswer} from '../redux/actions'
-import {connect} from 'react-redux'
-import {getValue} from '../redux/service/storage/AsyncStorage'
+import { Text } from 'native-base';
+import MapView from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import { connect } from 'react-redux';
+
+import { getDetailPokemon } from '../redux/actions';
 
 class Detail extends Component {
-  constructor(props) {
-    super(props);
-    const { navigation } = props;
-    const data = navigation.getParam("data", "");
 
-    this.state = {
-      // data: data,
-      answer: ''
-    };
-  }
+    constructor(props) {
+        super(props);
+        const { navigation } = props;
+        const data = navigation.getParam("data", "");
+    
+        this.state = {
+          data: data,
+          readmore: ''
+        };
+      }
 
-  componentDidMount() {
-    const id = this.props.navigation.getParam('id', '');
-        this.props.getDetail(id);
-      
-}
-
-async checkToken(idQuestion, answer){
-  const token = await getValue('token')
-  if(token){
-    alert(answer)
-  //   console.log('>>>>>>>>', idProduct);
-      const { id } = this.props.user
-      this.props.postAnswer(idQuestion, answer, token);
-      this.props.navigation.navigate('Home');
-  } else {
-  
-      const { type, token } = this.props.token
-      const authToken = type + ' ' + token;
-      const { id } =this.props.user
-      this.props.postAnswer(idQuestion, answer, id, authToken);
-      this.props.navigation.navigate('Home');
-  }
-}
-
-// checkToken = async() => {
-//   const token = await getValue('token')
-//   if (token) {
-//       this.props.getUser(token);
-//       return 1;
-//   }else{
-//       const { type, token } = this.props.token
-//       const authToken = type + ' ' + token;
-//       this.props.getUser(authToken);
-//   }
-// }
-
-// postAnswer(title, content){
-//   const { type, token } = this.props.token
-//     const authToken = type + ' ' + token;
-//     this.props.postQuestion(title, content, authToken);
-//     this.props.navigation.navigate("Home");
-// }
-
-postAnswer(idQuestion, answer){
-  if(this.props.isLoggedIn === false){
-      this.props.navigation.navigate('Login')
-  } else {
-      this.checkToken(idQuestion, answer)
-  }
-}
-
-
-  render() {
-    if(!this.props.readmore.user || !this.props.answer){
-      return <Text>loading..</Text>
+    componentDidMount() {
+        const { navigation } = this.props;
+        const id = navigation.getParam('id', '')
+        // alert(id)
+        this.props.getDetailPokemon(id)
     }
-  
-    return (
-      <Container>
-        <Content>
-          <Card>
-            <CardItem header>
-              <Text style={styles.textProduct}>
-              {this.props.readmore.title}
-              </Text>
-            </CardItem>
-          </Card>
-          <Card>
-            <CardItem>
-              <Text>{this.props.readmore.content}</Text>
-            </CardItem>
-            <CardItem>
-              <Text>{this.props.readmore.user.username}</Text>
-            </CardItem>
-            </Card>
-            <Card >
-            <CardItem
-              style={{ borderBottomColor: "#dee0e2", borderBottomWidth: 1 }}>
-              <Text style={{ fontWeight: "bold", paddingLeft: 15}}>
-              {this.props.answer.length} Answers
-              </Text>
-            </CardItem>
-          </Card>
 
-          <List>
-            <FlatList
-              data={this.props.answer}
-              renderItem={({ item }) => (
+    render() {
+    // alert(this.props.readmore)
+        if (!this.props.readmore || !this.props.readmore.latitude) {
+            return (
                 <View>
-                  <Card > 
-                    <CardItem>
-                      <Text> {item.content}</Text>
-                      </CardItem>
-                  </Card>
+                    <ActivityIndicator size="large" color="#0000ff" />
                 </View>
-              )}
-            />
-          </List>
+            )
+        } else {
+            return (
 
-          <Card>
-            <Button   onPress={() => this.postAnswer(this.props.readmore.id, this.state.answer)}
-            style={styles.btnPost}><Text style={{color: '#FFF'}}> {this.props.isLoggedIn ? "Post Answer" : "Login" }</Text></Button>
-            <CardItem>
-           
-            <TextInput
-            style={styles.input}
-            autoCapitalize="none"
-            value={this.state.answer}
-            onChangeText={(text) => this.setState({ answer: text })}
-            autoCorrect={false}
-            keyboardType="default"
-            returnKeyType="next"
-            placeholder="Your Answer"
-            placeholderTextColor="rgba(225,225,225,0.7)"
-            multiline = {true}
-            numberOfLines = {4}
-            editable={this.props.isLoggedIn ? true : false}
-          />
-            </CardItem>
-          </Card>
-        </Content>
-      </Container>
-    );
-  }
+                <ScrollView>
+                    <View>
+                        <Image style={styles.image}
+                            source={{ uri: this.props.readmore.image_url }}
+                        />
+                        <View style={styles.container}>
+                        
+                            <Text style={styles.name}>{this.props.readmore.name}</Text>
+                            <MapView
+                                style={{ width: '100%', height: 200 }}
+                                region={{
+                                    latitude: this.props.readmore.latitude,
+                                    longitude: this.props.readmore.longitude,
+                                    latitudeDelta: 0.003,
+                                    longitudeDelta: 0.003
+                                }}
+                                showsUserLocation={true}
+                            >
+                                <MapView.Marker 
+                                    title={this.props.readmore.name}
+                                    // image={{uri : this.props.readmore.image_url}}
+                                    coordinate={{
+
+                                        latitude: this.props.readmore.latitude,
+                                        longitude: this.props.readmore.longitude,
+                                    }}
+                                />
+                                
+                            </MapView>
+                        </View>
+                    </View>
+                </ScrollView>
+            )
+        }
+    }
 }
 
 const mapStateToProps = state => {
-  console.log('->', state.questions.readmore)
-  return {
-      readmore: state.questions.readmore,
-      answer: state.questions.answer,
-      access_token: state.account.access_token,
-      isLoggedIn: state.account.isLoggedIn,
-      user: state.account.user
-  }   
+    // alert(state.pokemons.readmore)
+    return {
+        readmore: state.pokemons.readmore
+    }
 }
 
-const mapDispatchToProps = dispatch => ({
-  getDetail: (id) => dispatch(getDetail(id)),
-  getUser: (token) => dispatch(getUser(token)),
-  postAnswer: (idQuestion, answer, authToken) => dispatch(postAnswer(idQuestion, answer, authToken))
-})
+const mapDispatchToProps = dispatch => {
+    return {
+        getDetailPokemon: (id) => {
+            dispatch(getDetailPokemon(id))
+        }
+    }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Detail)
+// export default Detail;
 
 const styles = StyleSheet.create({
-  footerButtonMain: {
-    backgroundColor: "#3a455c",
-    marginLeft: 4,
-    marginRight: 4,
-    flex: 0.5,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  image: {
-    height: 350,
-    width: null,
-    flex: 1
-  },
-  textProduct: {
-    fontWeight: "bold",
-    fontSize: 22
-  },
-  footerStyle: {
-    backgroundColor: "#3a455c",
-    paddingBottom: 5,
-    flexDirection: "row",
+    image: {
+        width: Dimensions.get('window').width,
+        height: 200
+    },
+    container: {
+        paddingLeft: 20,
+        paddingBottom: 15,
+        paddingRight: 20,
+        paddingTop: 15
+    },
+    name: {
+        fontWeight: 'bold',
+        fontSize: 16,
+        paddingBottom: 10
+    },
+    address: {
+        color: 'grey',
+        fontSize: 14,
+        paddingTop: 10,
+        paddingBottom: 5
+    }
+})
 
-    paddingTop: 5
-  },
-  btnPost: {
-   padding: 10,
-   backgroundColor: '#0770cd'
-  },
-  textImage: {
-    fontWeight: "bold",
-    color: "#44dd44",
-    fontSize: 18
-  },
-  input: {
-    // height: 40,
-    width: '100%',
-    backgroundColor: "rgba(225,225,225,0.2)",
-    marginBottom: 10,
-    padding: 10,
-    color: "#000",
-    borderWidth: 1,
-    borderColor: '#0770cd'
-  },
-  buttonText: {
-    textAlign: "center",
-    fontSize: 18,
-    alignSelf: "center",
-    color: "#ffffff"
-  }
-});

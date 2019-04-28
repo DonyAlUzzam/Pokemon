@@ -12,8 +12,7 @@ import { store } from "./app/redux/store";
 import Login from "./app/screens/Login/Login";
 import Register from "./app/screens/Register/Register";
 import ProfileScreen from "./app/screens/Profile/ProfileScreen";
-import Detail from "./app/screens/Detail";
-import Questions from './app/screens/PostQuestions'
+import Detail from './app/screens/Detail'
 
 const AppDrawerNavigator = createStackNavigator({
   HomeScreen: {
@@ -24,7 +23,7 @@ const AppDrawerNavigator = createStackNavigator({
         marginLeft: 70,
         color: "white"
       },
-      title: "Community Exchange",
+      title: "PokeDooN",
       headerStyle: {
         backgroundColor: "#2c3e50"
       },
@@ -45,23 +44,23 @@ const AppDrawerNavigator = createStackNavigator({
     }
   },
 
-  Questions: {
-    screen: Questions,
-    headerMode: "",
-    navigationOptions: {
-      headerTintColor: '#FFF',
-      // headerLeft: null,
-      // gesturesEnabled: false,
-      headerTitleStyle: {
-        marginLeft: 0,
-        color: "white"
-      },
-      title: "Post Your Questions",
-      headerStyle: {
-        backgroundColor: "#2c3e50"
-      }
-    }
-  },
+  // Questions: {
+  //   screen: Questions,
+  //   headerMode: "",
+  //   navigationOptions: {
+  //     headerTintColor: '#FFF',
+  //     // headerLeft: null,
+  //     // gesturesEnabled: false,
+  //     headerTitleStyle: {
+  //       marginLeft: 0,
+  //       color: "white"
+  //     },
+  //     title: "Post Your Questions",
+  //     headerStyle: {
+  //       backgroundColor: "#2c3e50"
+  //     }
+  //   }
+  // },
 
   Detail: {
     screen: Detail,
@@ -112,35 +111,35 @@ const AppContainer = createAppContainer(AppDrawerNavigator);
 
 export default class App extends Component {
 
-  constructor(props) {
-    super(props);
-    OneSignal.init("d7c17cab-2142-4f1f-921d-95d7a29295c3");
+  // constructor(props) {
+  //   super(props);
+  //   OneSignal.init("d7c17cab-2142-4f1f-921d-95d7a29295c3");
 
-    OneSignal.addEventListener('received', this.onReceived);
-    OneSignal.addEventListener('opened', this.onOpened);
-    OneSignal.addEventListener('ids', this.onIds);
-  }
+  //   OneSignal.addEventListener('received', this.onReceived);
+  //   OneSignal.addEventListener('opened', this.onOpened);
+  //   OneSignal.addEventListener('ids', this.onIds);
+  // }
 
-  componentWillUnmount() {
-    OneSignal.removeEventListener('received', this.onReceived);
-    OneSignal.removeEventListener('opened', this.onOpened);
-    OneSignal.removeEventListener('ids', this.onIds);
-  }
+  // componentWillUnmount() {
+  //   OneSignal.removeEventListener('received', this.onReceived);
+  //   OneSignal.removeEventListener('opened', this.onOpened);
+  //   OneSignal.removeEventListener('ids', this.onIds);
+  // }
 
-  onReceived(notification) {
-    console.log("Notification received: ", notification);
-  }
+  // onReceived(notification) {
+  //   console.log("Notification received: ", notification);
+  // }
 
-  onOpened(openResult) {
-    console.log('Message: ', openResult.notification.payload.body);
-    console.log('Data: ', openResult.notification.payload.additionalData);
-    console.log('isActive: ', openResult.notification.isAppInFocus);
-    console.log('openResult: ', openResult);
-  }
+  // onOpened(openResult) {
+  //   console.log('Message: ', openResult.notification.payload.body);
+  //   console.log('Data: ', openResult.notification.payload.additionalData);
+  //   console.log('isActive: ', openResult.notification.isAppInFocus);
+  //   console.log('openResult: ', openResult);
+  // }
 
-  onIds(device) {
-    console.log('Device info: ', device);
-  }
+  // onIds(device) {
+  //   console.log('Device info: ', device);
+  // }
 
 
   render() {

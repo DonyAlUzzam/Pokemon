@@ -2,54 +2,54 @@ import axios from 'axios';
 import { BASE_URL, PIC_URL } from 'react-native-dotenv';
 
 
-export const getAll = () => {
+export const getAllPokemon = () => {
     return {
-        type: 'GET_ALL_QUESTIONS',
-        payload: axios.get(`${BASE_URL}questions`)
+        type: 'GET_ALL_POKEMONS',
+        payload: axios.get(`${BASE_URL}pokemons`)
     }   
 }
 
-export const getDetail = (id) => {
+export const getDetailPokemon = (id) => {
     return {
-        type:  'GET_QUESTION_DETAIL',
-        payload: axios.get(`${BASE_URL}questions/` + id)
+        type:  'GET_POKEMON_DETAIL',
+        payload: axios.get(`${BASE_URL}pokemons/` + id)
     }
 }
 
-export const postQuestion = ( title, content, authToken) => {
-    alert(authToken)
-    return {
-        type: 'POST_QUESTION',
-        payload: axios.post(`${BASE_URL}questions/`, {
+// export const postQuestion = ( title, content, authToken) => {
+//     alert(authToken)
+//     return {
+//         type: 'POST_QUESTION',
+//         payload: axios.post(`${BASE_URL}questions/`, {
      
-            'title': title,
-            'content': content
-        },{
-            headers:{
-                Authorization: authToken
-            }
-        }
+//             'title': title,
+//             'content': content
+//         },{
+//             headers:{
+//                 Authorization: authToken
+//             }
+//         }
         
-        )
-    }
-}
+//         )
+//     }
+// }
 
-export const postAnswer = (idQuestion, answer, authToken) => {
-    return {
-        type: 'POST_ANSWER',
-        payload: axios.post(`${BASE_URL}answers/`, {
+// export const postAnswer = (idQuestion, answer, authToken) => {
+//     return {
+//         type: 'POST_ANSWER',
+//         payload: axios.post(`${BASE_URL}answers/`, {
            
-            'question_id': idQuestion,
-            'content': answer
-        },{
-            headers:{
-                Authorization: authToken
-            }
-        }
+//             'question_id': idQuestion,
+//             'content': answer
+//         },{
+//             headers:{
+//                 Authorization: authToken
+//             }
+//         }
         
-        )
-    }
-}
+//         )
+//     }
+// }
 
 // Account
 export const registerUser = ( username, email, password, confirm_password ) => {
