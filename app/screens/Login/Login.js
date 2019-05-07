@@ -52,7 +52,7 @@ class Login extends Component {
     return (
         <ScrollView  style={styles.container}>
      
-          <Image style={styles.logo} source={require("../../assets/logo.png")} />
+          <Image resizeMode='center' style={styles.logo} source={require("../../assets/poke.png")} />
         <View style={styles.container2}>
           <KeyboardAvoidingView behavior="padding">
           <TextInput

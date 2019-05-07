@@ -60,7 +60,7 @@ class Register extends Component {
         <ScrollView  style={styles.container}>
      
         {/* <View style={styles.loginContainer}> */}
-          <Image style={styles.logo} source={require("../../assets/logo.png")} />
+          <Image resizeMode='center' style={styles.logo} source={require("../../assets/poke.png")} />
         {/* </View> */}
         <View style={styles.container2}>
           {/* <StatusBar barStyle="light-content" /> */}

@@ -6,15 +6,16 @@ class Pokemon extends Component {
     render() {
     //    alert(this.props.itemType)
         return (
+            
             <View style={{ flex: 1, flexDirectopn: "column", backgroundColor: 'silver' }}>
                 <Card>
                     <TouchableOpacity onPress={this.props.getDetails}>
                         <CardItem cardBody>
-                            <Image
+                            <Image resizeMode='center'
                                 source={{
                                     uri: this.props.itemImage
                                 }}
-                                style={{ height: 170, width: null, flex: 1, padding: 10 }}
+                                style={{ height: 130, width: null, flex: 1, padding: 10 }}
                             />
                         </CardItem>
                         <CardItem>

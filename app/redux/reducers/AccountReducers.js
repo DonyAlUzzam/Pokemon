@@ -12,7 +12,6 @@ export default (state = initial, action) => {
       // setValue("token", JSON.stringify(action.payload.data.access_token));
       // console.log(action.payload.data.data);
       return {
-        ...state,
         access_token: action.payload.data.access_token,
         user: action.payload.data.user,
         isLoggedIn: true
@@ -22,7 +21,6 @@ export default (state = initial, action) => {
       setValue("token", JSON.stringify(type + " " + token));
       console.log(action.payload.data.access_token);
       return {
-        ...state,
          // user: action.payload.data.user,
          user: action.payload.data.user,
         // access_token: action.payload.data.access_token,

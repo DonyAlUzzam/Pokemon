@@ -13,27 +13,14 @@ import Login from "./app/screens/Login/Login";
 import Register from "./app/screens/Register/Register";
 import ProfileScreen from "./app/screens/Profile/ProfileScreen";
 import Detail from './app/screens/Detail'
+import UpdatePokemon from './app/screens/UpdatePokemon'
 
 const AppDrawerNavigator = createStackNavigator({
   HomeScreen: {
     screen: RouteNav,
-    headerMode: "none",
+    headerMode: "",
     navigationOptions: {
-      headerTitleStyle: {
-        marginLeft: 70,
-        color: "white"
-      },
-      title: "PokeDooN",
-      headerStyle: {
-        backgroundColor: "#2c3e50"
-      },
-      headerBackground: (
-        <Image
-          resizeMode="contain"
-          style={{ width: 70, height: 35, top: 10, left: 0 }}
-          source={require("./app/assets/icon.png")}
-        />
-      )
+    header:null
     }
   },
   Register: {
@@ -43,24 +30,6 @@ const AppDrawerNavigator = createStackNavigator({
       header: null
     }
   },
-
-  // Questions: {
-  //   screen: Questions,
-  //   headerMode: "",
-  //   navigationOptions: {
-  //     headerTintColor: '#FFF',
-  //     // headerLeft: null,
-  //     // gesturesEnabled: false,
-  //     headerTitleStyle: {
-  //       marginLeft: 0,
-  //       color: "white"
-  //     },
-  //     title: "Post Your Questions",
-  //     headerStyle: {
-  //       backgroundColor: "#2c3e50"
-  //     }
-  //   }
-  // },
 
   Detail: {
     screen: Detail,
@@ -73,7 +42,32 @@ const AppDrawerNavigator = createStackNavigator({
         marginLeft: 0,
         color: "white"
       },
-      title: "Community Exchange",
+      title: "Detail Pokemon",
+      headerStyle: {
+        backgroundColor: "#2c3e50"
+      },
+      headerBackground: (
+        <Image
+          resizeMode="contain"
+          style={{ width: 70, height: 35, top: 10, left: 0 }}
+          // source={require("./app/assets/icon.png")}
+        />
+      )
+    }
+  },
+
+  UpdatePokemon: {
+    screen: UpdatePokemon,
+    headerMode: "",
+    navigationOptions: {
+     headerTintColor: '#FFF',
+      // headerLeft: null,
+      // gesturesEnabled: false,
+      headerTitleStyle: {
+        marginLeft: 0,
+        color: "white"
+      },
+      title: "Update Pokemon",
       headerStyle: {
         backgroundColor: "#2c3e50"
       },

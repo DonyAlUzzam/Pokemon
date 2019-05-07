@@ -9,6 +9,7 @@ export const setValue = async (key, val) => {
 
 export const getValue = key => {
   return AsyncStorage.getItem(key).then(val => {
+    // alert(val)
     return JSON.parse(val);
   }).catch((e) => {
       console.log('error get value')
